@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Task 4 Test | @eng_with_betty</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f0e8;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255,200,150,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(200,230,220,0.2) 0%, transparent 50%);
+    min-height: 100vh;
+    padding-bottom: 40px;
+    overflow-x: hidden;
+}
+
+.deco {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    font-size: 40px;
+    opacity: 0.5;
+}
+.deco-1 { top: 2%; left: 2%; font-size: 50px; transform: rotate(-15deg); }
+.deco-2 { top: 5%; right: 3%; font-size: 35px; transform: rotate(20deg); }
+.deco-3 { bottom: 3%; left: 3%; font-size: 45px; transform: rotate(10deg); }
+.deco-4 { bottom: 5%; right: 2%; font-size: 40px; transform: rotate(-10deg); }
+
+.nickname {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #e8a0b4, #d4849a);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+    transform: rotate(-2deg);
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 60px 16px 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,240,232,0.95));
+    border-radius: 12px;
+    margin-bottom: 25px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 2px solid #e8d5c4;
+}
+
+.header::before {
+    content: '🎙️';
+    position: absolute;
+    top: -15px;
+    right: 20px;
+    font-size: 30px;
+}
+
+.header::after {
+    content: '🌿';
+    position: absolute;
+    bottom: -12px;
+    left: 20px;
+    font-size: 25px;
+}
+
+.main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 36px;
+    font-weight: 700;
+    color: #5a8a7a;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #8b7355;
+    font-weight: 300;
+}
+
+.subtitle span { color: #d4849a; font-weight: 600; }
+
+.section {
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    padding: 24px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    border-left: 4px solid #98d4bb;
+}
+
+.section:nth-child(even) { border-left-color: #e8a0b4; }
+.section:nth-child(3n) { border-left-color: #f4c87a; }
+
+.section-title {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: #5a6b5a;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quiz-item {
+    margin-bottom: 18px;
+    padding: 16px;
+    background: rgba(245,240,232,0.6);
+    border-radius: 10px;
+    border: 1px dashed #d4c5b0;
+    transition: all 0.3s;
+}
+
+.quiz-item.correct {
+    border-color: #98d4bb;
+    background: rgba(152,212,187,0.15);
+}
+
+.quiz-item.wrong {
+    border-color: #e8a0b4;
+    background: rgba(232,160,180,0.1);
+}
+
+.quiz-question {
+    font-weight: 600;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.quiz-question .number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8a0b4;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    border: 1px solid transparent;
+}
+
+.quiz-option:hover, .quiz-option:active {
+    background: rgba(152,212,187,0.15);
+}
+
+.quiz-option.selected {
+    border-color: #98d4bb;
+    background: rgba(152,212,187,0.1);
+}
+
+.quiz-option input[type="radio"] {
+    accent-color: #98d4bb;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.quiz-option label {
+    cursor: pointer;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.check-btn {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 25px auto;
+    padding: 16px 30px;
+    background: linear-gradient(135deg, #98d4bb, #7ec8a8);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(152,212,187,0.4);
+    transition: all 0.3s;
+}
+
+.check-btn:active {
+    transform: scale(0.97);
+}
+
+.result {
+    display: none;
+    text-align: center;
+    padding: 25px 20px;
+    background: linear-gradient(135deg, rgba(152,212,187,0.2), rgba(201,228,222,0.2));
+    border-radius: 15px;
+    margin-top: 20px;
+    border: 2px solid rgba(152,212,187,0.3);
+}
+
+.result.show { display: block; animation: fadeIn 0.5s; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-score {
+    font-family: 'Caveat', cursive;
+    font-size: 42px;
+    color: #5a8a7a;
+    font-weight: 700;
+}
+
+.result-text {
+    font-size: 15px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+/* Part 2 - Plan */
+.plan-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 12px;
+    background: rgba(245,240,232,0.6);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px dashed #d4c5b0;
+    transition: all 0.3s;
+    flex-wrap: wrap;
+}
+
+.plan-item.correct-order {
+    border-color: #98d4bb;
+    background: rgba(152,212,187,0.15);
+}
+
+.plan-item.wrong-order {
+    border-color: #e8a0b4;
+    background: rgba(232,160,180,0.1);
+}
+
+.plan-input {
+    width: 42px;
+    height: 42px;
+    border: 2px solid #d4c5b0;
+    border-radius: 50%;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #5a6b5a;
+    background: white;
+    flex-shrink: 0;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.plan-input:focus {
+    border-color: #98d4bb;
+}
+
+.plan-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+    flex: 1;
+    min-width: 150px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-size: 13px;
+}
+
+.footer .heart { color: #e8a0b4; }
+
+@media (max-width: 400px) {
+    .main-title { font-size: 30px; }
+    .section { padding: 18px 14px; }
+    .quiz-item { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="nickname">@eng_with_betty</div>
+
+<div class="deco deco-1">🌺</div>
+<div class="deco deco-2">🌸</div>
+<div class="deco deco-3">🍂</div>
+<div class="deco deco-4">🌼</div>
+
+<div class="container">
+
+    <div class="header">
+        <h1 class="main-title">How much do you know about Task 4?</h1>
+        <p class="subtitle">Voice message • <span>Устная часть</span> • ЕГЭ</p>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section">
+        <h2 class="section-title">🎯 Part 1. Отметьте верный ответ</h2>
+        <form id="quiz">
+
+            <div class="quiz-item" id="item1">
+                <div class="quiz-question"><span class="number">1</span> Кто выполняет школьную проектную работу?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">a) мой друг и я</label></div>
+                    <div class="quiz-option"><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">b) мой друг</label></div>
+                    <div class="quiz-option"><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">c) только я</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item2">
+                <div class="quiz-question"><span class="number">2</span> Что вы нашли?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">a) некоторые иллюстрации</label></div>
+                    <div class="quiz-option"><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">b) некоторые данные</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item3">
+                <div class="quiz-question"><span class="number">3</span> Кому вы собираетесь оставить голосовое сообщение?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">a) вашему учителю</label></div>
+                    <div class="quiz-option"><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">b) вашему другу</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item4">
+                <div class="quiz-question"><span class="number">4</span> О чём должно быть голосовое сообщение?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">a) почему я выбрал эти фотографии для проектной работы и высказать мнение по предмету проекта</label></div>
+                    <div class="quiz-option"><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">b) почему я выбрал эти фотографии для проекта и детали проекта</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item5">
+                <div class="quiz-question"><span class="number">5</span> Сколько времени даётся на подготовку?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q5" value="a" id="q5a"><label for="q5a">a) 2.5 минуты</label></div>
+                    <div class="quiz-option"><input type="radio" name="q5" value="b" id="q5b"><label for="q5b">b) 3 минуты</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item6">
+                <div class="quiz-question"><span class="number">6</span> Сколько времени даётся на выполнение задания?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q6" value="a" id="q6a"><label for="q6a">a) 2.5 минуты</label></div>
+                    <div class="quiz-option"><input type="radio" name="q6" value="b" id="q6b"><label for="q6b">b) 3 минуты</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item7">
+                <div class="quiz-question"><span class="number">7</span> Сколько предложений должно быть в голосовом сообщении?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q7" value="a" id="q7a"><label for="q7a">a) 10-12 предложений</label></div>
+                    <div class="quiz-option"><input type="radio" name="q7" value="b" id="q7b"><label for="q7b">b) 12-15 предложений</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item8">
+                <div class="quiz-question"><span class="number">8</span> Сколько пунктов в плане, который должен быть полностью раскрыт?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q8" value="a" id="q8a"><label for="q8a">a) 4</label></div>
+                    <div class="quiz-option"><input type="radio" name="q8" value="b" id="q8b"><label for="q8b">b) 5</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item9">
+                <div class="quiz-question"><span class="number">9</span> Требуется ли следовать пунктам плана в порядке, в котором они даны?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q9" value="a" id="q9a"><label for="q9a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q9" value="b" id="q9b"><label for="q9b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item10">
+                <div class="quiz-question"><span class="number">10</span> Требуется ли включать вступительную и заключительную фразы в ответ?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q10" value="a" id="q10a"><label for="q10a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q10" value="b" id="q10b"><label for="q10b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item11">
+                <div class="quiz-question"><span class="number">11</span> Упомянуты ли вступительная и заключительная фразы в пунктах плана?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q11" value="a" id="q11a"><label for="q11a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q11" value="b" id="q11b"><label for="q11b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item12">
+                <div class="quiz-question"><span class="number">12</span> Включаются ли вступительная и заключительная фразы в число предложений?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q12" value="a" id="q12a"><label for="q12a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q12" value="b" id="q12b"><label for="q12b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item13">
+                <div class="quiz-question"><span class="number">13</span> Требуется ли обращаться к другу, предпочтительно по имени?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q13" value="a" id="q13a"><label for="q13a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q13" value="b" id="q13b"><label for="q13b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item14">
+                <div class="quiz-question"><span class="number">14</span> Должно ли описание относиться к теме проекта?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q14" value="a" id="q14a"><label for="q14a">a) да</label></div>
+                    <div class="quiz-option"><input type="radio" name="q14" value="b" id="q14b"><label for="q14b">b) нет</label></div>
+                </div>
+            </div>
+
+            <div class="quiz-item" id="item15">
+                <div class="quiz-question"><span class="number">15</span> С чем должны быть связаны преимущества и недостатки?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option"><input type="radio" name="q15" value="a" id="q15a"><label for="q15a">a) с картинками</label></div>
+                    <div class="quiz-option"><input type="radio" name="q15" value="b" id="q15b"><label for="q15b">b) с тем, что указано в плане</label></div>
+                </div>
+            </div>
+
+            <button type="button" class="check-btn" onclick="checkPart1()">✨ Check Part 1 ✨</button>
+        </form>
+
+        <div class="result" id="result1">
+            <div class="result-score" id="score1"></div>
+            <div class="result-text" id="resultText1"></div>
+        </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="section">
+        <h2 class="section-title">📝 Part 2. Расположите пункты плана в правильном порядке</h2>
+        <p style="font-size:13px; color:#888; margin-bottom:15px; line-height:1.5;">
+            Write the correct number (1–6) next to each stage.
+        </p>
+
+        <div id="planContainer">
+            <div class="plan-item" data-correct="2">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">explain the choice of the illustrations for the project by briefly describing them and noting the differences</div>
+            </div>
+
+            <div class="plan-item" data-correct="6">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">ending the voice message</div>
+            </div>
+
+            <div class="plan-item" data-correct="5">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">express your opinion on the subject of the project — _______________</div>
+            </div>
+
+            <div class="plan-item" data-correct="1">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">starting the voice message</div>
+            </div>
+
+            <div class="plan-item" data-correct="4">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">mention the disadvantages (1-2) of _______________</div>
+            </div>
+
+            <div class="plan-item" data-correct="3">
+                <input type="text" class="plan-input" maxlength="2" placeholder="?">
+                <div class="plan-text">mention the advantages (1-2) of _______________</div>
+            </div>
+        </div>
+
+        <button type="button" class="check-btn" onclick="checkPart2()">✨ Check Part 2 ✨</button>
+
+        <div class="result" id="result2">
+            <div class="result-score" id="score2"></div>
+            <div class="result-text" id="resultText2"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Made with <span class="heart">♥</span> by <strong>@eng_with_betty</strong></p>
+        <p style="margin-top:5px; font-size:11px;">ЕГЭ 2026 • Task 4 • Voice message</p>
+    </div>
+
+</div>
+
+<script>
+const correctAnswers = {
+    q1:'a', q2:'a', q3:'b', q4:'a', q5:'a',
+    q6:'b', q7:'b', q8:'a', q9:'a', q10:'a',
+    q11:'b', q12:'a', q13:'a', q14:'a', q15:'b'
+};
+
+function checkPart1() {
+    let score = 0;
+    let total = 15;
+    let unanswered = 0;
+
+    for (let i = 1; i <= total; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const item = document.getElementById(`item${i}`);
+        item.classList.remove('correct', 'wrong');
+
+        if (selected) {
+            if (selected.value === correctAnswers[`q${i}`]) {
+                score++;
+                item.classList.add('correct');
+            } else {
+                item.classList.add('wrong');
+            }
+        } else {
+            unanswered++;
+            item.classList.add('wrong');
+        }
+    }
+
+    const resultDiv = document.getElementById('result1');
+    const scoreDiv = document.getElementById('score1');
+    const textDiv = document.getElementById('resultText1');
+
+    resultDiv.classList.add('show');
+    scoreDiv.textContent = `${score} / ${total}`;
+
+    if (score === total) {
+        textDiv.textContent = '🎉 Perfect! You know everything about Task 4!';
+    } else if (score >= 12) {
+        textDiv.textContent = '🌟 Excellent! Almost perfect!';
+    } else if (score >= 9) {
+        textDiv.textContent = '👍 Good job, but there\'s room to improve!';
+    } else if (score >= 6) {
+        textDiv.textContent = '📚 Not bad, but review the theory!';
+    } else {
+        textDiv.textContent = '💪 Don\'t give up! Study the plan and try again!';
+    }
+
+    if (unanswered > 0) {
+        textDiv.textContent += ` (${unanswered} unanswered)`;
+    }
+
+    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function checkPart2() {
+    const items = document.querySelectorAll('.plan-item');
+    let score = 0;
+    let total = items.length;
+    let unanswered = 0;
+
+    items.forEach(item => {
+        const input = item.querySelector('.plan-input');
+        const correct = item.getAttribute('data-correct');
+        const value = input.value.trim();
+
+        item.classList.remove('correct-order', 'wrong-order');
+
+        if (value === '') {
+            unanswered++;
+            item.classList.add('wrong-order');
+        } else if (value === correct) {
+            score++;
+            item.classList.add('correct-order');
+        } else {
+            item.classList.add('wrong-order');
+        }
+    });
+
+    const resultDiv = document.getElementById('result2');
+    const scoreDiv = document.getElementById('score2');
+    const textDiv = document.getElementById('resultText2');
+
+    resultDiv.classList.add('show');
+    scoreDiv.textContent = `${score} / ${total}`;
+
+    if (score === total) {
+        textDiv.textContent = '🎉 Perfect! You know the voice message structure completely!';
+    } else if (score >= 5) {
+        textDiv.textContent = '🌟 Excellent! Almost perfect!';
+    } else if (score >= 4) {
+        textDiv.textContent = '👍 Good, but review the plan!';
+    } else {
+        textDiv.textContent = '📚 Study the voice message structure and try again!';
+    }
+
+    if (unanswered > 0) {
+        textDiv.textContent += ` (${unanswered} empty fields)`;
+    }
+
+    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.querySelectorAll('.quiz-option').forEach(option => {
+    option.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+            const siblings = this.parentElement.querySelectorAll('.quiz-option');
+            siblings.forEach(s => s.classList.remove('selected'));
+            this.classList.add('selected');
+        }
+    });
+});
+</script>
+
+</body>
+</html>
